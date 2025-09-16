@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>How Long We’ve Been Together</title>
+  <title>Our Journey</title>
   <style>
     body {
       margin: 0;
@@ -11,7 +11,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      background: #f5f0e6; /* beige scrapbook bg */
+      background-color: #f5f0e6; /* beige scrapbook theme */
       font-family: 'Comic Sans MS', cursive, sans-serif;
       overflow: hidden;
     }
@@ -21,155 +21,121 @@
       position: relative;
     }
 
-    /* Photo */
-    .photo-circle {
+    /* Circle photo */
+    .circle-photo {
       width: 200px; /* bigger frame */
       height: 200px;
       border-radius: 50%;
       overflow: hidden;
-      margin: 0 auto 20px auto;
-      border: 5px solid #d9c9a5;
-      box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+      margin: 0 auto 20px;
       opacity: 0;
-      transform: translateY(40px);
-      transition: all 0.8s ease;
+      transform: translateY(50px);
+      transition: all 1s ease;
     }
-
-    .photo-circle img {
+    .circle-photo img {
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
 
-    /* Search Box */
-    .search-box {
+    /* First box (question) */
+    .question-box {
       background: #fff;
-      border: 2px solid #d9c9a5;
+      padding: 15px 25px;
       border-radius: 25px;
-      padding: 12px 20px;
-      font-size: 18px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
       display: inline-flex;
       align-items: center;
+      gap: 10px;
+      font-size: 18px;
       cursor: pointer;
-      box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
-      opacity: 0;
-      transform: translateY(30px);
-      transition: all 0.8s ease;
+      opacity: 1;
+      transform: translateY(0);
+      transition: all 1s ease;
+    }
+    .question-box img {
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
     }
 
-    .search-box img {
-      margin-left: 10px;
-      width: 20px;
-      height: 20px;
-    }
-
-    /* Countdown Box */
+    /* Countdown box */
     .countdown-box {
-      background: #fff;
-      border: 2px solid #d9c9a5;
-      border-radius: 25px;
-      padding: 20px 30px;
-      font-size: 20px;
       margin-top: 20px;
-      box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
+      background: #fff;
+      padding: 15px 25px;
+      border-radius: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      font-size: 18px;
       display: none;
-      animation: fadeSlide 0.8s ease forwards;
+      opacity: 0;
+      transform: translateY(50px);
+      transition: all 1s ease;
     }
 
-    @keyframes fadeSlide {
-      from {opacity: 0; transform: translateY(30px);}
-      to {opacity: 1; transform: translateY(0);}
-    }
-
-    /* Countdown numbers */
-    #countdown {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      font-weight: bold;
-      margin-top: 10px;
-    }
-
-    #countdown div {
-      background: #fdf6ec;
-      border-radius: 12px;
-      padding: 12px;
-      min-width: 70px;
-      box-shadow: 2px 2px 6px rgba(0,0,0,0.1);
-    }
-
-    #countdown span {
-      display: block;
-      font-size: 14px;
-      font-weight: normal;
-      margin-top: 5px;
-      color: #555;
+    /* Active state for animation */
+    .active {
+      opacity: 1 !important;
+      transform: translateY(0) !important;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <!-- Photo -->
-    <div class="photo-circle" id="photoCircle">
-      <img src="yourphoto.jpg" alt="Us">
+    <div class="circle-photo" id="circlePhoto">
+      <img src="YOUR_GITHUB_IMAGE_URL" alt="Us">
     </div>
 
-    <!-- Search Box -->
-    <div class="search-box" id="searchBox">
-      do u know how old u are now ehe 
-      <!-- Replace this link with your GitHub image raw link -->
-      <img src="images/meme.jpg" alt="search icon">
+    <div class="question-box" id="questionBox">
+      <span>do u know how old u are now ehe</span>
+      <img src="images/meme.jpg" alt="icon" id="searchIcon">
     </div>
 
-    <!-- Countdown Box -->
     <div class="countdown-box" id="countdownBox">
-      <div id="countdown"></div>
+      <p id="countdown"></p>
     </div>
   </div>
 
   <script>
-    const searchBox = document.getElementById("searchBox");
+    const questionBox = document.getElementById("questionBox");
     const countdownBox = document.getElementById("countdownBox");
-    const photoCircle = document.getElementById("photoCircle");
+    const countdown = document.getElementById("countdown");
+    const circlePhoto = document.getElementById("circlePhoto");
+    const searchIcon = document.getElementById("searchIcon");
 
-    // Start hidden
-    window.onload = () => {
-      setTimeout(() => {
-        searchBox.style.opacity = "1";
-        searchBox.style.transform = "translateY(0)";
-      }, 300);
-    };
+    const birthday = new Date("2002-09-19T00:00:00").getTime();
 
-    searchBox.addEventListener("click", () => {
-      // Show photo smoothly
-      photoCircle.style.opacity = "1";
-      photoCircle.style.transform = "translateY(0)";
-      // Show countdown after
-      setTimeout(() => {
-        countdownBox.style.display = "block";
-      }, 500);
-    });
-
-    // Countdown from his birthday: 19 Sept 2002
-    const startDate = new Date("2002-09-19T00:00:00").getTime();
-    const countdownElement = document.getElementById("countdown");
-
-    setInterval(() => {
+    function updateCountdown() {
       const now = new Date().getTime();
-      const distance = now - startDate;
+      const distance = now - birthday;
 
       const days = Math.floor(distance / (1000 * 60 * 60 * 24));
       const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
       const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-      countdownElement.innerHTML = `
-        <div>${days}<span>Days</span></div>
-        <div>${hours}<span>Hours</span></div>
-        <div>${minutes}<span>Mins</span></div>
-        <div>${seconds}<span>Secs</span></div>
-      `;
-    }, 1000);
+      countdown.innerHTML = `${days} Days ${hours} Hours ${minutes} Mins ${seconds} Sec`;
+    }
+
+    setInterval(updateCountdown, 1000);
+
+    function revealCountdown() {
+      circlePhoto.style.display = "block";
+      countdownBox.style.display = "block";
+
+      setTimeout(() => {
+        circlePhoto.classList.add("active");
+        countdownBox.classList.add("active");
+        questionBox.classList.add("active");
+      }, 100);
+    }
+
+    // trigger when clicking either the box or icon
+    questionBox.addEventListener("click", revealCountdown);
+    searchIcon.addEventListener("click", (e) => {
+      e.stopPropagation();
+      revealCountdown();
+    });
   </script>
 </body>
 </html>
