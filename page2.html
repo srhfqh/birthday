@@ -65,16 +65,17 @@
 
     /* Countdown Box */
     .countdown-box {
-      background: #fff;
-      border: 2px solid #d9c9a5;
-      border-radius: 25px;
-      padding: 20px 30px;
-      font-size: 20px;
-      margin-top: 20px;
-      box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
-      display: none;
-      animation: fadeSlide 0.8s ease forwards;
-    }
+    margin-top: 20px;
+    background: linear-gradient(135deg, #fff7f0, #fdf2e9); /* pastel beige gradient */
+    padding: 20px 25px;
+    border-radius: 30px; /* rounder bubble look */
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1), 0 0 15px rgba(255, 182, 193, 0.3); /* soft glow */
+    font-size: 18px;
+    display: none;
+    opacity: 0;
+    transform: translateY(50px);
+    transition: all 1s ease;
+  }
 
     @keyframes fadeSlide {
       from {opacity: 0; transform: translateY(30px);}
@@ -83,28 +84,28 @@
 
     /* Countdown numbers */
     #countdown {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      font-weight: bold;
-      margin-top: 10px;
-    }
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+  }
 
-    #countdown div {
-      background: #fdf6ec;
-      border-radius: 12px;
-      padding: 12px;
-      min-width: 70px;
-      box-shadow: 2px 2px 6px rgba(0,0,0,0.1);
-    }
+  #countdown span {
+    background: #fff;
+    padding: 12px 18px;
+    border-radius: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    font-weight: bold;
+    color: #444;
+    min-width: 90px;
+    text-align: center;
+    font-size: 16px;
+    transition: transform 0.3s ease;
+  }
 
-    #countdown span {
-      display: block;
-      font-size: 14px;
-      font-weight: normal;
-      margin-top: 5px;
-      color: #555;
-    }
+  #countdown span:hover {
+    transform: scale(1.1); /* cute hover pop effect */
+  }
   </style>
 </head>
 <body>
@@ -163,13 +164,34 @@
       const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-      countdownElement.innerHTML = `
-        <div>${days}<span>Days</span></div>
-        <div>${hours}<span>Hours</span></div>
-        <div>${minutes}<span>Mins</span></div>
-        <div>${seconds}<span>Secs</span></div>
-      `;
-    }, 1000);
-  </script>
+      countdown.innerHTML = `
+      <span>${days}<br>Days</span>
+      <span>${hours}<br>Hours</span>
+      <span>${minutes}<br>Mins</span>
+      <span>${seconds}<br>Sec</span>
+    `;
+  }
+
+  setInterval(updateCountdown, 1000);
+
+  function revealCountdown() {
+    circlePhoto.style.display = "block";
+    countdownBox.style.display = "block";
+
+    setTimeout(() => {
+      circlePhoto.classList.add("active");
+      countdownBox.classList.add("active");
+      questionBox.classList.add("active");
+    }, 100);
+  }
+
+  // trigger when clicking either the box or icon
+  questionBox.addEventListener("click", revealCountdown);
+  searchIcon.addEventListener("click", (e) => {
+    e.stopPropagation();
+    revealCountdown();
+  });
+</script>
+  
 </body>
 </html>
