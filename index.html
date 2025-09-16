@@ -1,65 +1,373 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Our Special Day</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Secret — enter our date</title>
+
+  <!-- Google fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
   <style>
-    body {
-      font-family: 'Dancing Script', cursive;
-      background-color: #f5f1e6;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      flex-direction: column;
+    :root{
+      --bg:#f6f1e8;        /* soft beige */
+      --paper:#fffdf9;     /* paper card */
+      --accent:#d6c6b1;    /* tape / button */
+      --accent-2:#f3e9e3;
+      --shadow: 0 8px 18px rgba(23,20,15,0.08);
+      --muted:#c9bda9;
+      --danger:#e07b7b;
     }
-    .card {
-      background: #fffaf3;
-      padding: 30px;
-      border: 2px solid #e0d5c1;
-      border-radius: 12px;
-      box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
-      text-align: center;
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:Inter, system-ui, sans-serif;
+      background:
+        linear-gradient(120deg, rgba(255,255,255,0.35), transparent 30%),
+        url('') center/cover no-repeat,
+        var(--bg);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:28px;
+      -webkit-font-smoothing:antialiased;
     }
-    input {
-      padding: 8px;
-      border: 1px solid #c9bda9;
-      border-radius: 6px;
-      margin-top: 10px;
+
+    /* scrapbook container */
+    .scrapbook {
+      width: min(760px, 96vw);
+      background: linear-gradient(180deg, var(--paper), #fff);
+      border-radius:18px;
+      padding:28px;
+      box-shadow: var(--shadow);
+      border:1px solid rgba(0,0,0,0.03);
+      position:relative;
+      overflow:visible;
     }
-    button {
-      margin-top: 10px;
-      background: #d6c7b2;
-      border: none;
-      padding: 8px 14px;
-      border-radius: 6px;
-      cursor: pointer;
+
+    /* washi tape decoration */
+    .tape {
+      position:absolute;
+      width:120px;
+      height:36px;
+      left:22px;
+      top:-14px;
+      background:linear-gradient(90deg, #f6e9e2, #efe1d5);
+      transform:rotate(-8deg);
+      border-radius:6px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-family:'Dancing Script', cursive;
+      color:#8c6b5a;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      border:1px dashed rgba(0,0,0,0.03);
     }
-    .error {
-      margin-top: 10px;
-      color: #a35d5d;
-      font-size: 14px;
+
+    .title {
+      font-family:'Dancing Script', cursive;
+      font-size:28px;
+      margin:0 0 6px;
+      color:#6b4f3b;
+      letter-spacing:0.3px;
     }
+    .subtitle {
+      font-size:14px;
+      color:var(--muted);
+      margin-bottom:18px;
+    }
+
+    /* locked box */
+    .lock-wrap{
+      display:flex;
+      gap:22px;
+      align-items:center;
+      margin-bottom:20px;
+    }
+
+    .box {
+      background: linear-gradient(180deg,#fff,#fffaf3);
+      border-radius:14px;
+      padding:18px;
+      width:220px;
+      height:170px;
+      box-shadow: 0 10px 28px rgba(0,0,0,0.06);
+      border:1px solid rgba(0,0,0,0.04);
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      position:relative;
+    }
+
+    .shackle {
+      width:60px;
+      height:40px;
+      border:6px solid var(--muted); /* top arc */
+      border-bottom:none;
+      border-radius:40px 40px 0 0;
+      position:absolute;
+      top:-20px;
+      left:calc(50% - 30px);
+      background:transparent;
+      transition:transform .25s ease;
+    }
+
+    .box.locked .shackle { transform: translateY(0) rotate(0); }
+    .box.unlocked .shackle { transform: translateY(6px) rotate(-12deg); }
+
+    .dots {
+      display:flex;
+      gap:10px;
+      margin-top:8px;
+    }
+    .dot {
+      width:18px;
+      height:18px;
+      background:transparent;
+      border-radius:50%;
+      border:2px solid var(--muted);
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      transition:background .15s, transform .12s;
+    }
+    .dot.filled {
+      background: var(--accent);
+      border-color: var(--accent);
+      transform:scale(1.05);
+      box-shadow: 0 4px 8px rgba(214,198,177,0.15);
+    }
+
+    /* keypad */
+    .keypad {
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:12px;
+      width:320px;
+    }
+    .key {
+      background: linear-gradient(180deg,var(--accent-2), #fff);
+      border-radius:14px;
+      padding:18px 12px;
+      font-size:20px;
+      text-align:center;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.06);
+      border:1px solid rgba(0,0,0,0.03);
+      cursor:pointer;
+      user-select:none;
+      transition: transform .08s ease, box-shadow .08s;
+      font-weight:600;
+    }
+    .key:active{ transform: translateY(2px) scale(.995); box-shadow: 0 4px 10px rgba(0,0,0,0.05);}
+    .key.k-special{ font-size:16px; color:#6b4f3b; background:var(--accent); }
+
+    .controls {
+      display:flex;
+      gap:10px;
+      margin-top:12px;
+      align-items:center;
+      justify-content:center;
+    }
+    .small-btn {
+      background:transparent;
+      border:none;
+      font-size:13px;
+      color:var(--muted);
+      cursor:pointer;
+    }
+
+    /* error shake */
+    @keyframes shake {
+      0%{ transform:translateX(0) } 20%{ transform:translateX(-8px)} 40%{ transform:translateX(8px)} 60%{transform:translateX(-6px)} 80%{transform:translateX(6px)} 100%{transform:translateX(0)}
+    }
+    .box.shake { animation:shake .5s ease; border-color: rgba(224,123,123,0.7); }
+
+    /* helper footer note */
+    .hint {
+      font-size:13px;
+      color:var(--muted);
+      margin-top:12px;
+      text-align:center;
+    }
+
+    /* responsive */
+    @media (max-width:720px){
+      .lock-wrap{ flex-direction:column; gap:12px; align-items:center;}
+      .keypad{ width:100%; }
+    }
+
   </style>
 </head>
 <body>
-  <div class="card">
-    <h2>💌 Enter our first date 💌</h2>
-    <input type="password" id="password" placeholder="ddmmyyyy">
-    <button onclick="checkPassword()">Submit</button>
-    <p class="error" id="error"></p>
-  </div>
+  <main class="scrapbook" role="main" aria-labelledby="heading">
+    <div class="tape">Private</div>
+
+    <h1 class="title" id="heading">Open the little box</h1>
+    <p class="subtitle">Enter the special numbers — our first date as partners 💌</p>
+
+    <div class="lock-wrap">
+      <div id="lockBox" class="box locked" aria-hidden="false" aria-live="polite">
+        <div class="shackle" aria-hidden="true"></div>
+        <div style="text-align:center">
+          <div style="font-size:13px;color:#8c6b5a;font-weight:600">Locked</div>
+          <div class="dots" id="dots" aria-hidden="true">
+            <div class="dot" data-index="0"></div>
+            <div class="dot" data-index="1"></div>
+            <div class="dot" data-index="2"></div>
+            <div class="dot" data-index="3"></div>
+            <div class="dot" data-index="4"></div>
+            <div class="dot" data-index="5"></div>
+            <div class="dot" data-index="6"></div>
+            <div class="dot" data-index="7"></div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="keypad" role="group" aria-label="Number keypad">
+          <!-- keypad numbers -->
+          <div class="key" data-key="1">1</div>
+          <div class="key" data-key="2">2</div>
+          <div class="key" data-key="3">3</div>
+
+          <div class="key" data-key="4">4</div>
+          <div class="key" data-key="5">5</div>
+          <div class="key" data-key="6">6</div>
+
+          <div class="key" data-key="7">7</div>
+          <div class="key" data-key="8">8</div>
+          <div class="key" data-key="9">9</div>
+
+          <div class="key k-special" data-key="clear">Clear</div>
+          <div class="key" data-key="0">0</div>
+          <div class="key k-special" data-key="back">←</div>
+        </div>
+
+        <div class="controls" aria-hidden="true">
+          <button class="small-btn" id="hintBtn" title="Hint">Hint</button>
+          <button class="small-btn" id="resetBtn" title="Reset">Reset</button>
+        </div>
+
+        <p class="hint" id="hintText" style="visibility:hidden">Try ddmmyyyy — e.g. 25092023</p>
+      </div>
+    </div>
+
+  </main>
 
   <script>
-    function checkPassword() {
-      let input = document.getElementById("password").value;
-      let correct = "25092023"; // <-- replace with your date in ddmmyyyy format
-      if (input === correct) {
-        window.location.href = "birthday.html"; // redirect to main page
-      } else {
-        document.getElementById("error").innerText = "Hehe nope, try again sayang 💕";
+    (function(){
+      // === CONFIGURE THIS ===
+      const correctPin = "25092023"; // <- REPLACE with your first date in numbers ddmmyyyy (no slashes)
+      const redirectTo = "birthday.html"; // <- REPLACE with your main scrapbook page filename
+      const maxLen = correctPin.length;
+      // ======================
+
+      const dots = Array.from(document.querySelectorAll('.dot'));
+      const keys = document.querySelectorAll('.key');
+      const box = document.getElementById('lockBox');
+      const hintBtn = document.getElementById('hintBtn');
+      const resetBtn = document.getElementById('resetBtn');
+      const hintText = document.getElementById('hintText');
+
+      let input = "";
+
+      function updateDots(){
+        dots.forEach((d,i)=>{
+          d.classList.toggle('filled', i < input.length);
+        });
       }
-    }
+
+      function pressKey(k){
+        if(k === "clear"){
+          input = "";
+          updateDots();
+          return;
+        }
+        if(k === "back"){
+          input = input.slice(0,-1);
+          updateDots();
+          return;
+        }
+        if(typeof k === "string" && /^\d$/.test(k)){
+          if(input.length >= maxLen) return; // ignore extra digits
+          input += k;
+          updateDots();
+          if(input.length === maxLen) checkPin();
+        }
+      }
+
+      function checkPin(){
+        if(input === correctPin){
+          unlock();
+        } else {
+          wrong();
+        }
+      }
+
+      function unlock(){
+        box.classList.remove('locked');
+        box.classList.add('unlocked');
+        // small flourish then redirect
+        setTimeout(()=> {
+          // Redirect to main page
+          window.location.href = redirectTo;
+        }, 650);
+      }
+
+      function wrong(){
+        // red flash / shake
+        box.classList.add('shake');
+        setTimeout(()=> box.classList.remove('shake'), 600);
+        // flash dots with danger color briefly
+        dots.forEach(d => {
+          d.style.transition = "background .12s";
+          d.style.background = "var(--danger)";
+          setTimeout(()=> {
+            d.style.background = "";
+          }, 350);
+        });
+        // clear input shortly after
+        setTimeout(()=> { input=""; updateDots(); }, 700);
+      }
+
+      keys.forEach(k=> k.addEventListener('click', ()=> pressKey(k.dataset.key)));
+
+      // keyboard support (numbers)
+      window.addEventListener('keydown', (e)=> {
+        if(e.key === "Backspace") return pressKey('back');
+        if(e.key === "Delete") return pressKey('clear');
+        if(/^[0-9]$/.test(e.key)) pressKey(e.key);
+      });
+
+      // hint & reset
+      hintBtn.addEventListener('click', ()=> {
+        hintText.style.visibility = hintText.style.visibility === 'visible' ? 'hidden' : 'visible';
+      });
+      resetBtn.addEventListener('click', ()=> {
+        input=""; updateDots();
+      });
+
+      // set CSS var for danger color (used in JS)
+      const root = document.documentElement;
+      root.style.setProperty('--danger', '#e07b7b');
+
+      // accessibility: announce status changes
+      const liveAnnouncer = document.createElement('div');
+      liveAnnouncer.setAttribute('role','status');
+      liveAnnouncer.setAttribute('aria-live','polite');
+      liveAnnouncer.style.position='absolute';
+      liveAnnouncer.style.left='-9999px';
+      document.body.appendChild(liveAnnouncer);
+      function announce(msg){ liveAnnouncer.textContent = msg; }
+
+      // Announce when filled/cleared
+      const observer = new MutationObserver(()=> announce(`${input.length} of ${maxLen} digits entered`));
+      observer.observe(document.getElementById('dots'), { attributes:true, subtree:true, childList:true, characterData:true });
+
+    })();
   </script>
 </body>
 </html>
