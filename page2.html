@@ -2,15 +2,17 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Page 2 - Countdown</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How Long We’ve Been Together</title>
   <style>
     body {
-      font-family: 'Poppins', sans-serif;
-      background: #f0f8ff;
+      margin: 0;
+      height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      background: #f5f0e6; /* beige scrapbook bg */
+      font-family: 'Comic Sans MS', cursive, sans-serif;
       overflow: hidden;
     }
 
@@ -19,130 +21,149 @@
       position: relative;
     }
 
-    .box {
-      background: white;
-      padding: 20px 30px;
-      border-radius: 20px;
-      box-shadow: 0px 6px 20px rgba(0,0,0,0.15);
-      font-size: 20px;
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      cursor: pointer;
-      transition: all 0.6s ease, opacity 0.6s ease;
-    }
-
-    .box.hidden {
-      opacity: 0;
-      transform: translateY(-100px);
-      pointer-events: none;
-    }
-
-    .search-icon {
-      font-size: 22px;
-      color: #555;
-    }
-
-    .photo {
+    /* Photo */
+    .photo-circle {
       width: 120px;
       height: 120px;
       border-radius: 50%;
+      overflow: hidden;
+      margin: 0 auto 20px auto;
+      border: 4px solid #d9c9a5;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 0.8s ease;
+    }
+
+    .photo-circle img {
+      width: 100%;
+      height: 100%;
       object-fit: cover;
-      border: 5px solid #fff;
-      box-shadow: 0px 4px 15px rgba(0,0,0,0.2);
-      margin: 20px auto;
-      opacity: 0;
-      transform: translateY(50px);
-      transition: all 0.8s ease;
     }
 
-    .photo.show {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .countdown {
+    /* Search Box */
+    .search-box {
       background: #fff;
-      margin-top: 20px;
-      padding: 20px;
-      border-radius: 20px;
-      box-shadow: 0px 6px 20px rgba(0,0,0,0.15);
-      font-size: 22px;
-      opacity: 0;
-      transform: translateY(100px);
-      transition: all 0.8s ease;
+      border: 2px solid #d9c9a5;
+      border-radius: 25px;
+      padding: 12px 20px;
+      font-size: 18px;
+      display: inline-flex;
+      align-items: center;
+      cursor: pointer;
+      box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
+      transition: all 0.5s ease;
+      margin-bottom: 20px;
     }
 
-    .countdown.show {
-      opacity: 1;
-      transform: translateY(0);
+    .search-box:hover {
+      background: #fdf6ec;
     }
 
-    .time {
-      display: inline-block;
-      margin: 0 15px;
+    .search-icon {
+      margin-left: 10px;
+      font-size: 20px;
+      color: #a68b6a;
+    }
+
+    /* Countdown Box */
+    .countdown-box {
+      background: #fff;
+      border: 2px solid #d9c9a5;
+      border-radius: 25px;
+      padding: 20px 30px;
+      font-size: 20px;
+      margin-top: 10px;
+      box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
+      display: none;
+      animation: fadeSlide 0.8s ease forwards;
+    }
+
+    @keyframes fadeSlide {
+      from {opacity: 0; transform: translateY(30px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+
+    /* Countdown numbers */
+    #countdown {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
       font-weight: bold;
-      color: #333;
+      margin-top: 10px;
+    }
+
+    #countdown div {
+      background: #fdf6ec;
+      border-radius: 12px;
+      padding: 12px;
+      min-width: 70px;
+      box-shadow: 2px 2px 6px rgba(0,0,0,0.1);
+    }
+
+    #countdown span {
+      display: block;
+      font-size: 14px;
+      font-weight: normal;
+      margin-top: 5px;
+      color: #555;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <!-- First Box -->
-    <div class="box" id="questionBox">
-      u have been in this eath for ? 
+    <!-- Photo -->
+    <div class="photo-circle" id="photoCircle">
+      <img src="yourphoto.jpg" alt="Us">
+    </div>
+
+    <!-- Search Box -->
+    <div class="search-box" id="searchBox">
+      Do u know that u are an old man? 
       <span class="search-icon">🔍</span>
     </div>
 
-    <!-- Photo -->
-    <img src="yourphoto.jpg" alt="Us" class="photo" id="photo">
-
     <!-- Countdown Box -->
-    <div class="countdown" id="countdown">
-      <span class="time" id="days"></span> Days 
-      <span class="time" id="hours"></span> Hours 
-      <span class="time" id="minutes"></span> Mins 
-      <span class="time" id="seconds"></span> Sec
+    <div class="countdown-box" id="countdownBox">
+      <div id="countdown"></div>
     </div>
   </div>
 
   <script>
-    const questionBox = document.getElementById("questionBox");
-    const photo = document.getElementById("photo");
-    const countdownBox = document.getElementById("countdown");
+    const searchBox = document.getElementById("searchBox");
+    const countdownBox = document.getElementById("countdownBox");
+    const photoCircle = document.getElementById("photoCircle");
 
-    // Birthday start date
-    const startDate = new Date("2002-09-19T00:00:00");
-
-    questionBox.addEventListener("click", () => {
-      // Hide question box
-      questionBox.classList.add("hidden");
-
-      // Show photo after delay
+    searchBox.addEventListener("click", () => {
+      // Show photo
+      photoCircle.style.opacity = "1";
+      photoCircle.style.transform = "translateY(0)";
+      // Show countdown
       setTimeout(() => {
-        photo.classList.add("show");
-        countdownBox.classList.add("show");
-      }, 600);
+        countdownBox.style.display = "block";
+      }, 400);
     });
 
-    function updateCountdown() {
-      const now = new Date();
-      const diff = now - startDate; // difference in ms
+    // Countdown from his birthday: 19 Sept 2002
+    const startDate = new Date("2002-09-19T00:00:00").getTime();
+    const countdownElement = document.getElementById("countdown");
 
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-      const minutes = Math.floor((diff / (1000 * 60)) % 60);
-      const seconds = Math.floor((diff / 1000) % 60);
+    setInterval(() => {
+      const now = new Date().getTime();
+      const distance = now - startDate;
 
-      document.getElementById("days").textContent = days;
-      document.getElementById("hours").textContent = hours;
-      document.getElementById("minutes").textContent = minutes;
-      document.getElementById("seconds").textContent = seconds;
-    }
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-    // Update every second
-    setInterval(updateCountdown, 1000);
-    updateCountdown();
+      countdownElement.innerHTML = `
+        <div>${days}<span>Days</span></div>
+        <div>${hours}<span>Hours</span></div>
+        <div>${minutes}<span>Mins</span></div>
+        <div>${seconds}<span>Secs</span></div>
+      `;
+    }, 1000);
   </script>
 </body>
 </html>
