@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Our Scrapbook 💖</title>
+  <style>
+    body {
+      background: #fdfaf6;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    #flipbook {
+      width: 800px;
+      height: 500px;
+    }
+    #flipbook .page {
+      background: #fdf6ec;
+      border: 2px solid #d9c9a5;
+      font-family: 'Scrapbook', cursive;
+      font-size: 22px;
+      padding: 30px;
+      box-shadow: 2px 2px 8px rgba(0,0,0,0.15);
+    }
+  </style>
+</head>
+<body>
+  <div id="flipbook">
+    <div class="page">💌 Happy Birthday, Sayang!</div>
+    <div class="page"><img src="images/us1.jpg" style="width:100%; border-radius:15px;"></div>
+    <div class="page">💖 I love you more than words can say!</div>
+    <div class="page">🎉 Surprise ending page!</div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/turn.js/4.1.0/turn.min.js"></script>
+  <script>
+    $("#flipbook").turn({
+      width: 800,
+      height: 500,
+      autoCenter: true
+    });
+  </script>
+</body>
+</html>
