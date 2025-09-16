@@ -23,13 +23,13 @@
 
     /* Photo */
     .photo-circle {
-      width: 120px;
-      height: 120px;
+      width: 200px; /* bigger frame */
+      height: 200px;
       border-radius: 50%;
       overflow: hidden;
       margin: 0 auto 20px auto;
-      border: 4px solid #d9c9a5;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+      border: 5px solid #d9c9a5;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.2);
       opacity: 0;
       transform: translateY(40px);
       transition: all 0.8s ease;
@@ -52,18 +52,15 @@
       align-items: center;
       cursor: pointer;
       box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
-      transition: all 0.5s ease;
-      margin-bottom: 20px;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s ease;
     }
 
-    .search-box:hover {
-      background: #fdf6ec;
-    }
-
-    .search-icon {
+    .search-box img {
       margin-left: 10px;
-      font-size: 20px;
-      color: #a68b6a;
+      width: 20px;
+      height: 20px;
     }
 
     /* Countdown Box */
@@ -73,7 +70,7 @@
       border-radius: 25px;
       padding: 20px 30px;
       font-size: 20px;
-      margin-top: 10px;
+      margin-top: 20px;
       box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
       display: none;
       animation: fadeSlide 0.8s ease forwards;
@@ -119,8 +116,9 @@
 
     <!-- Search Box -->
     <div class="search-box" id="searchBox">
-      Do u know that u are an old man? 
-      <span class="search-icon">🔍</span>
+      do u know how old u are now ehe 
+      <!-- Replace this link with your GitHub image raw link -->
+      <img src="searchicon.jpg" alt="search icon">
     </div>
 
     <!-- Countdown Box -->
@@ -134,14 +132,22 @@
     const countdownBox = document.getElementById("countdownBox");
     const photoCircle = document.getElementById("photoCircle");
 
+    // Start hidden
+    window.onload = () => {
+      setTimeout(() => {
+        searchBox.style.opacity = "1";
+        searchBox.style.transform = "translateY(0)";
+      }, 300);
+    };
+
     searchBox.addEventListener("click", () => {
-      // Show photo
+      // Show photo smoothly
       photoCircle.style.opacity = "1";
       photoCircle.style.transform = "translateY(0)";
-      // Show countdown
+      // Show countdown after
       setTimeout(() => {
         countdownBox.style.display = "block";
-      }, 400);
+      }, 500);
     });
 
     // Countdown from his birthday: 19 Sept 2002
