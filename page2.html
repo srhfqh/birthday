@@ -65,47 +65,42 @@
 
     /* Countdown Box */
     .countdown-box {
-    margin-top: 20px;
-    background: linear-gradient(135deg, #fff7f0, #fdf2e9); /* pastel beige gradient */
-    padding: 20px 25px;
-    border-radius: 30px; /* rounder bubble look */
-    box-shadow: 0 8px 20px rgba(0,0,0,0.1), 0 0 15px rgba(255, 182, 193, 0.3); /* soft glow */
-    font-size: 18px;
-    display: none;
-    opacity: 0;
-    transform: translateY(50px);
-    transition: all 1s ease;
-  }
-
-    @keyframes fadeSlide {
-      from {opacity: 0; transform: translateY(30px);}
-      to {opacity: 1; transform: translateY(0);}
+      margin-top: 20px;
+      background: linear-gradient(135deg, #fff7f0, #fdf2e9);
+      padding: 20px 25px;
+      border-radius: 30px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1), 0 0 15px rgba(255, 182, 193, 0.3);
+      font-size: 18px;
+      display: none;
+      opacity: 0;
+      transform: translateY(50px);
+      transition: all 1s ease;
     }
 
     /* Countdown numbers */
     #countdown {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    flex-wrap: wrap;
-  }
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
 
-  #countdown span {
-    background: #fff;
-    padding: 12px 18px;
-    border-radius: 20px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    font-weight: bold;
-    color: #444;
-    min-width: 90px;
-    text-align: center;
-    font-size: 16px;
-    transition: transform 0.3s ease;
-  }
+    #countdown span {
+      background: #fff;
+      padding: 12px 18px;
+      border-radius: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      font-weight: bold;
+      color: #444;
+      min-width: 90px;
+      text-align: center;
+      font-size: 16px;
+      transition: transform 0.3s ease;
+    }
 
-  #countdown span:hover {
-    transform: scale(1.1); /* cute hover pop effect */
-  }
+    #countdown span:hover {
+      transform: scale(1.1);
+    }
   </style>
 </head>
 <body>
@@ -118,7 +113,6 @@
     <!-- Search Box -->
     <div class="search-box" id="searchBox">
       lemme remind u how old u are now 
-      <!-- Replace this link with your GitHub image raw link -->
       <img src="images/meme.jpg" alt="search icon">
     </div>
 
@@ -132,8 +126,9 @@
     const searchBox = document.getElementById("searchBox");
     const countdownBox = document.getElementById("countdownBox");
     const photoCircle = document.getElementById("photoCircle");
+    const countdownElement = document.getElementById("countdown");
 
-    // Start hidden
+    // Animate search box on load
     window.onload = () => {
       setTimeout(() => {
         searchBox.style.opacity = "1";
@@ -141,21 +136,22 @@
       }, 300);
     };
 
+    // When clicking search box → show photo + countdown
     searchBox.addEventListener("click", () => {
-      // Show photo smoothly
       photoCircle.style.opacity = "1";
       photoCircle.style.transform = "translateY(0)";
-      // Show countdown after
+
       setTimeout(() => {
         countdownBox.style.display = "block";
+        countdownBox.style.opacity = "1";
+        countdownBox.style.transform = "translateY(0)";
       }, 500);
     });
 
     // Countdown from his birthday: 19 Sept 2002
     const startDate = new Date("2002-09-19T00:00:00").getTime();
-    const countdownElement = document.getElementById("countdown");
 
-    setInterval(() => {
+    function updateCountdown() {
       const now = new Date().getTime();
       const distance = now - startDate;
 
@@ -164,34 +160,15 @@
       const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-      countdown.innerHTML = `
-      <span>${days}<br>Days</span>
-      <span>${hours}<br>Hours</span>
-      <span>${minutes}<br>Mins</span>
-      <span>${seconds}<br>Sec</span>
-    `;
-  }
+      countdownElement.innerHTML = `
+        <span>${days}<br>Days</span>
+        <span>${hours}<br>Hours</span>
+        <span>${minutes}<br>Mins</span>
+        <span>${seconds}<br>Sec</span>
+      `;
+    }
 
-  setInterval(updateCountdown, 1000);
-
-  function revealCountdown() {
-    circlePhoto.style.display = "block";
-    countdownBox.style.display = "block";
-
-    setTimeout(() => {
-      circlePhoto.classList.add("active");
-      countdownBox.classList.add("active");
-      questionBox.classList.add("active");
-    }, 100);
-  }
-
-  // trigger when clicking either the box or icon
-  questionBox.addEventListener("click", revealCountdown);
-  searchIcon.addEventListener("click", (e) => {
-    e.stopPropagation();
-    revealCountdown();
-  });
-</script>
-  
+    setInterval(updateCountdown, 1000);
+  </script>
 </body>
 </html>
