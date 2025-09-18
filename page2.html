@@ -13,7 +13,6 @@
       align-items: center;
       background: #f5f0e6; /* beige scrapbook bg */
       font-family: 'Comic Sans MS', cursive, sans-serif;
-      overflow: hidden;
     }
 
     .container {
@@ -23,7 +22,7 @@
 
     /* Photo */
     .photo-circle {
-      width: 200px; /* bigger frame */
+      width: 200px;
       height: 200px;
       border-radius: 50%;
       overflow: hidden;
@@ -52,9 +51,8 @@
       align-items: center;
       cursor: pointer;
       box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
-      opacity: 0;
-      transform: translateY(30px);
-      transition: all 0.8s ease;
+      opacity: 1; /* show immediately */
+      transform: translateY(0); /* already in place */
     }
 
     .search-box img {
@@ -128,14 +126,6 @@
     const photoCircle = document.getElementById("photoCircle");
     const countdownElement = document.getElementById("countdown");
 
-    // Animate search box on load
-    window.onload = () => {
-      setTimeout(() => {
-        searchBox.style.opacity = "1";
-        searchBox.style.transform = "translateY(0)";
-      }, 300);
-    };
-
     // When clicking search box → show photo + countdown
     searchBox.addEventListener("click", () => {
       photoCircle.style.opacity = "1";
@@ -147,23 +137,25 @@
         countdownBox.style.transform = "translateY(0)";
 
         // Create the button dynamically
-        const nextBtn = document.createElement("button");
-        nextBtn.textContent = "👉 Flip the scrapbook";
-        nextBtn.style.marginTop = "20px";
-        nextBtn.style.padding = "12px 24px";
-        nextBtn.style.border = "none";
-        nextBtn.style.borderRadius = "25px";
-        nextBtn.style.background = "#f7c9c9";
-        nextBtn.style.fontSize = "18px";
-        nextBtn.style.cursor = "pointer";
-        nextBtn.style.boxShadow = "0 4px 10px rgba(0,0,0,0.2)";
+        if (!document.getElementById("nextBtn")) {
+          const nextBtn = document.createElement("button");
+          nextBtn.id = "nextBtn";
+          nextBtn.textContent = "👉 Flip the scrapbook";
+          nextBtn.style.marginTop = "20px";
+          nextBtn.style.padding = "12px 24px";
+          nextBtn.style.border = "none";
+          nextBtn.style.borderRadius = "25px";
+          nextBtn.style.background = "#f7c9c9";
+          nextBtn.style.fontSize = "18px";
+          nextBtn.style.cursor = "pointer";
+          nextBtn.style.boxShadow = "0 4px 10px rgba(0,0,0,0.2)";
 
-        // When clicked → go to scrapbook page
-        nextBtn.addEventListener("click", () => {
-          window.location.href = "scrapbook.html";
-        });
+          nextBtn.addEventListener("click", () => {
+            window.location.href = "scrapbook.html";
+          });
 
-        countdownBox.appendChild(nextBtn);
+          countdownBox.appendChild(nextBtn);
+        }
       }, 500);
     });
 
@@ -187,6 +179,7 @@
       `;
     }
 
+    updateCountdown(); // run immediately once
     setInterval(updateCountdown, 1000);
   </script>
 </body>
