@@ -145,28 +145,27 @@
         countdownBox.style.display = "block";
         countdownBox.style.opacity = "1";
         countdownBox.style.transform = "translateY(0)";
+
+        // Create the button dynamically
+        const nextBtn = document.createElement("button");
+        nextBtn.textContent = "👉 Flip the scrapbook";
+        nextBtn.style.marginTop = "20px";
+        nextBtn.style.padding = "12px 24px";
+        nextBtn.style.border = "none";
+        nextBtn.style.borderRadius = "25px";
+        nextBtn.style.background = "#f7c9c9";
+        nextBtn.style.fontSize = "18px";
+        nextBtn.style.cursor = "pointer";
+        nextBtn.style.boxShadow = "0 4px 10px rgba(0,0,0,0.2)";
+
+        // When clicked → go to scrapbook page
+        nextBtn.addEventListener("click", () => {
+          window.location.href = "scrapbook.html";
+        });
+
+        countdownBox.appendChild(nextBtn);
       }, 500);
     });
-
-    // Create the button dynamically
-  const nextBtn = document.createElement("button");
-  nextBtn.textContent = "👉 Flip the scrapbook";
-  nextBtn.style.marginTop = "20px";
-  nextBtn.style.padding = "12px 24px";
-  nextBtn.style.border = "none";
-  nextBtn.style.borderRadius = "25px";
-  nextBtn.style.background = "#f7c9c9";
-  nextBtn.style.fontSize = "18px";
-  nextBtn.style.cursor = "pointer";
-  nextBtn.style.boxShadow = "0 4px 10px rgba(0,0,0,0.2)";
-  
-  // When clicked → go to scrapbook page
-  nextBtn.addEventListener("click", () => {
-    window.location.href = "scrapbook.html";
-  });
-
-  countdownBox.appendChild(nextBtn);
-}, 500);
 
     // Countdown from his birthday: 19 Sept 2002
     const startDate = new Date("2002-09-19T00:00:00").getTime();
